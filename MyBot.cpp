@@ -16,7 +16,7 @@ int main() {
             }
 
             for (const hlt::Planet& planet : map.planets) {
-                if (planet.owned) {
+                if (planet.owned && planet.entity_id != player_id) {
                     continue;
                 }
 
