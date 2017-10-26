@@ -29,9 +29,8 @@ int main() {
                         hlt::navigation::navigate_ship_to_dock(map, ship, planet, hlt::constants::MAX_SPEED / 2);
                 if (move.second) {
                     moves.push_back(move.first);
+                    break;
                 }
-
-                break;
             }
         }
 
