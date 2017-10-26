@@ -1,0 +1,8 @@
+CMakeCache.txt
+CMakeFiles/
+*.cmake
+Makefile
+
+*.log
+MyBot
+replay*.hlt
