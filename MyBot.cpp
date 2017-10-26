@@ -2,7 +2,7 @@
 #include "hlt/navigation.hpp"
 
 int main() {
-    const hlt::Metadata metadata = hlt::initialize("IvanTheTerrible");
+    const hlt::Metadata metadata = hlt::initialize("RueTheDog");
     const hlt::PlayerId player_id = metadata.player_id;
 
     std::vector<hlt::Move> moves;
