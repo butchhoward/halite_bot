@@ -26,5 +26,10 @@ namespace hlt {
         static void log(const std::string& message) {
             get().file << message << std::endl;
         }
+
+        static std::ofstream& out()
+        {
+            return get().file;
+        }
     };
 }
