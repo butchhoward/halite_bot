@@ -6,7 +6,7 @@
 #include "hlt/ship.hpp"
 #include "hlt/planet.hpp"
 #include "hlt/log.hpp"
-#include "hlt/move.hpp"
+#include "bot_utils/movenc.hpp"
 
 
 typedef struct planet_info 
@@ -22,7 +22,7 @@ public:
     planet_ship_info();
     void add_ship_to_planet(const hlt::EntityId& planet_id, const hlt::EntityId& ship_id);
     int planet_ship_count(const hlt::EntityId& planet_id);
-    const hlt::possibly<hlt::MoveNC> find_a_planet(const hlt::Map& map, const hlt::Ship& ship, const hlt::EntityId& player_id);
+    const hlt::possibly<MoveNC> find_a_planet(const hlt::Map& map, const hlt::Ship& ship, const hlt::EntityId& player_id);
     void clear();    
 
 private:

@@ -1,6 +1,7 @@
 #include "hlt/hlt.hpp"
 #include "bot_utils/log_utils.hpp"
 #include "bot_utils/bot_utils.hpp"
+#include "bot_utils/movenc.hpp"
 #include "bot_utils/planet_ship_info.hpp"
 
 #include <unordered_set>
@@ -35,10 +36,10 @@ int main()
                 continue;
             }
 
-            const hlt::possibly<hlt::MoveNC> move = planet_routing.find_a_planet(map, ship, player_id);
+            const hlt::possibly<MoveNC> move = planet_routing.find_a_planet(map, ship, player_id);
             if (move.second)
             {
-                moves.push_back(hlt::MoveNC::toMove(move.first));
+                moves.push_back(MoveNC::toMove(move.first));
             }
 
             // //ship has not been routed to a mine a planet

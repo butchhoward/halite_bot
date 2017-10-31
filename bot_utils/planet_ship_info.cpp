@@ -41,9 +41,9 @@ int planet_ship_info::planet_ship_count(const hlt::EntityId& planet_id)
     return 0;
 }
 
-const hlt::possibly<hlt::MoveNC> planet_ship_info::find_a_planet(const hlt::Map& map, const hlt::Ship& ship, const hlt::EntityId& player_id)
+const hlt::possibly<MoveNC> planet_ship_info::find_a_planet(const hlt::Map& map, const hlt::Ship& ship, const hlt::EntityId& player_id)
 {
-    hlt::possibly<hlt::MoveNC> move(hlt::Move::noop(), false);
+    hlt::possibly<MoveNC> move(hlt::Move::noop(), false);
     hlt::EntityId planet_id(0); //todo: bah not in this function
 
     for (const hlt::Planet &planet : map.planets)
