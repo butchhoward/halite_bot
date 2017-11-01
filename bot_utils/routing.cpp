@@ -1,4 +1,4 @@
-#include "planet_ship_info.hpp"
+#include "routing.hpp"
 #include "hlt/navigation.hpp"
 #include "bot_utils.hpp"
 
@@ -15,7 +15,7 @@ planet_info::planet_info(const hlt::Planet &planet)
 void planet_info::add_planet(const hlt::Planet &planet)
 {
     planet_id = planet.entity_id;
-    for ( const hlt::EntityId& ship : planet.docked_ships)
+    for (const hlt::EntityId &ship : planet.docked_ships)
     {
         add_ship(ship);
     }
@@ -23,35 +23,50 @@ void planet_info::add_planet(const hlt::Planet &planet)
 
 void planet_info::add_ship(const hlt::EntityId &ship)
 {
-    ships.insert(ship);    
+    ships.insert(ship);
 }
 
 int planet_info::ship_count()
 {
-    return ships.size();    
+    return ships.size();
 }
 
-
-
 /////////////////
-
-planet_ship_info::planet_ship_info()
+Routing::Routing()
+    : player_id(-1),
+      map(0, 0)
 {
 }
 
-void planet_ship_info::clear()
+void Routing::set_player_id(const hlt::EntityId &the_player_id)
+{
+    player_id = the_player_id;
+}
+
+void Routing::set_map(const hlt::Map &the_map)
+{
+    //because map.hpp does not have adequate constructors or settors
+    map.map_width = the_map.map_width;
+    map.map_height = the_map.map_height;
+    map.ships = the_map.ships;
+    map.ship_map = the_map.ship_map;
+    map.planets = the_map.planets;
+    map.planet_map = the_map.planet_map;
+}
+
+void Routing::clear()
 {
     planets.clear();
 }
 
-planet_info planet_ship_info::add_planet(const hlt::Planet &planet)
+planet_info Routing::add_planet(const hlt::Planet &planet)
 {
     planet_info p(planet);
     planets[planet.entity_id] = p;
     return p;
 }
 
-void planet_ship_info::add_ship_to_planet(const hlt::Planet& planet, const hlt::EntityId &ship)
+void Routing::add_ship_to_planet(const hlt::Planet &planet, const hlt::EntityId &ship)
 {
     planet_info info;
     auto it = planets.find(planet.entity_id);
@@ -67,7 +82,7 @@ void planet_ship_info::add_ship_to_planet(const hlt::Planet& planet, const hlt::
     planets[planet.entity_id] = info;
 }
 
-int planet_ship_info::planet_ship_count(const hlt::Planet &planet)
+int Routing::planet_ship_count(const hlt::Planet &planet)
 {
     auto it = planets.find(planet.entity_id);
     if (it != planets.end())
@@ -79,7 +94,7 @@ int planet_ship_info::planet_ship_count(const hlt::Planet &planet)
     return 0;
 }
 
-const hlt::possibly<MoveNC> planet_ship_info::find_a_planet(const hlt::Map &map, const hlt::Ship &ship, const hlt::EntityId &player_id)
+const hlt::possibly<MoveNC> Routing::find_a_planet(const hlt::Map &map, const hlt::Ship &ship, const hlt::EntityId &player_id)
 {
     hlt::possibly<MoveNC> move(hlt::Move::noop(), false);
     hlt::EntityId planet_id(0); //todo: bah not in this function

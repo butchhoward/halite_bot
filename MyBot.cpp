@@ -2,7 +2,7 @@
 #include "bot_utils/log_utils.hpp"
 #include "bot_utils/bot_utils.hpp"
 #include "bot_utils/movenc.hpp"
-#include "bot_utils/planet_ship_info.hpp"
+#include "bot_utils/routing.hpp"
 
 #include <unordered_set>
 #include <utility>
@@ -14,14 +14,16 @@ int main()
     const hlt::PlayerId player_id = metadata.player_id;
 
     std::vector<hlt::Move> moves;
-    planet_ship_info planet_routing;
+    Routing ship_routing;
+    ship_routing.set_player_id(player_id);
 
     
     for (;;)
     {
-        planet_routing.clear();
-        moves.clear();
         const hlt::Map map = hlt::in::get_map(metadata.map_width, metadata.map_height);
+        ship_routing.set_map(map);
+        ship_routing.clear();
+        moves.clear();
 
         log_all_planets(map.planets);
         hlt::Log::out() << "\n" << "Ships: " << map.ships.at(player_id).size() << std::endl;
@@ -36,7 +38,7 @@ int main()
                 continue;
             }
 
-            const hlt::possibly<MoveNC> move = planet_routing.find_a_planet(map, ship, player_id);
+            const hlt::possibly<MoveNC> move = ship_routing.find_a_planet(map, ship, player_id);
             if (move.second)
             {
                 moves.push_back(MoveNC::toMove(move.first));
