@@ -27,6 +27,7 @@ namespace hlt {
             get().file << message << std::endl;
         }
 
+        //added to be able to stream to the log file
         static std::ofstream& out()
         {
             return get().file;
