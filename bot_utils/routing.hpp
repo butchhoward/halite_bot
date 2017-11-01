@@ -1,31 +1,13 @@
 
-#include <unordered_set>
+#include "movenc.hpp"
+#include "planet_info.hpp"
 
 #include "hlt/map.hpp"
 #include "hlt/types.hpp"
 #include "hlt/ship.hpp"
 #include "hlt/planet.hpp"
-#include "hlt/log.hpp"
-#include "bot_utils/movenc.hpp"
 
-
-class planet_info 
-{
-public:
-    planet_info();
-    planet_info(const hlt::Planet& planet);
-
-    void add_planet(const hlt::Planet& planet);
-    void add_ship(const hlt::EntityId &ship);
-    int ship_count();
-    
-    
-    
-
-private:
-    hlt::EntityId planet_id;
-    std::unordered_set<hlt::EntityId> ships;
-};
+#include <unordered_set>
 
 
 class Routing
