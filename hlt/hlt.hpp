@@ -11,6 +11,7 @@ namespace hlt {
         const PlayerId player_id;
         const int map_width;
         const int map_height;
+        const Map initial_map;
     };
 
     /// Initialize our bot with the given name, getting back some metadata.
@@ -33,8 +34,8 @@ namespace hlt {
         // halite sends full map as part of initialization, we can discard it since
         // we'll get it as first map update anyway, but if you want, you can parse
         // it using hlt::in::get_map
-        in::get_string();
+        const Map map = hlt::in::get_map(map_width, map_height);
 
-        return { static_cast<PlayerId>(player_id), map_width, map_height };
+        return { static_cast<PlayerId>(player_id), map_width, map_height, map };
     }
 }
