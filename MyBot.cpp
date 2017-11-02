@@ -1,8 +1,7 @@
 #include "hlt/hlt.hpp"
-#include "bot_utils/log_utils.hpp"
-#include "bot_utils/bot_utils.hpp"
-#include "bot_utils/movenc.hpp"
-#include "bot_utils/routing.hpp"
+#include "log_utils.hpp"
+#include "movenc.hpp"
+#include "routing.hpp"
 
 #include <unordered_set>
 #include <utility>
