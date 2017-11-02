@@ -41,6 +41,7 @@ void Routing::clear()
 void Routing::update_routes_from_turn_map()
 {
     remove_destroyed_ships();
+    remove_docked_ships();
     remove_destroyed_planets();
     add_current_planets();
 }
@@ -71,6 +72,26 @@ void Routing::remove_destroyed_ships()
 
                 hlt::Log::out() << "remove_destroyed_ships p.first= " << p.first << " s= " << s << std::endl;
                 remove_ship_from_planet(p.first, s);
+            }
+        }
+    }
+}
+
+void Routing::remove_docked_ships()
+{
+    const std::vector<hlt::Ship> &player_ships = map.ships.at(player_id);
+
+    for (const auto &s : player_ships)
+    {
+        if (s.docking_status == hlt::ShipDockingStatus::Docked)
+        {
+            for ( const auto& p : planets )
+            {
+                if (ship_en_route_to_any_planet(s).second)
+                {
+                    hlt::Log::out() << "remove_docked_ships from planet= " << p.first << " s= " << s.entity_id << std::endl;
+                    remove_ship_from_planet(p.first, s.entity_id);
+                }
             }
         }
     }
@@ -216,7 +237,13 @@ hlt::possibly<MoveNC> Routing::continue_ships_previously_routed(const hlt::Ship&
     {
         hlt::Log::out() << "ship " << ship.entity_id << " already has route to planet " << enroute.first << std::endl;
         const hlt::Planet &planet = map.get_planet(enroute.first);
-        if (!planet.owned || planet.owner_id == player_id)
+
+        if (ship.docking_status != hlt::ShipDockingStatus::Undocked)
+        {
+            hlt::Log::out() << "ship already docked:" << ship.entity_id << std::endl;
+            remove_ship_from_planet(planet.entity_id, ship.entity_id);
+        }   
+        else if (!planet.owned || planet.owner_id == player_id)
         {
             move = dock_at_planet(ship, planet);
         }

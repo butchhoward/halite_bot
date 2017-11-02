@@ -36,6 +36,8 @@ private:
     void add_current_planets();
     void remove_destroyed_ships();
     void remove_destroyed_planets();
+    void remove_docked_ships();
+    
     
     hlt::EntityId player_id;
     hlt::Map map;

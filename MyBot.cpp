@@ -29,12 +29,6 @@ int main()
         {
             hlt::Log::out() << "ship: " << ship << std::endl;
 
-            if (ship.docking_status != hlt::ShipDockingStatus::Undocked)
-            {
-                hlt::Log::out() << "ship already docked:" << ship.entity_id << std::endl;
-                continue;
-            }
-
             const hlt::possibly<MoveNC> move = ship_routing.route_a_ship(ship);
             if (move.second)
             {
