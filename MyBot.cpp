@@ -7,27 +7,22 @@
 #include <unordered_set>
 #include <utility>
 
-
 int main()
 {
     const hlt::Metadata metadata = hlt::initialize("RueTheDog");
     const hlt::PlayerId player_id = metadata.player_id;
 
-    std::vector<hlt::Move> moves;
     Routing ship_routing;
     ship_routing.set_player_id(player_id);
+    ship_routing.set_map(metadata.initial_map);
 
-    
     for (;;)
     {
         const hlt::Map map = hlt::in::get_map(metadata.map_width, metadata.map_height);
-        ship_routing.set_map(map);
-        ship_routing.clear();
-        moves.clear();
-
-        log_all_planets(map.planets);
-        hlt::Log::out() << "\n" << "Ships: " << map.ships.at(player_id).size() << std::endl;
         
+        ship_routing.set_map(map);
+        std::vector<hlt::Move> moves;
+                
         for (const hlt::Ship &ship : map.ships.at(player_id))
         {
             hlt::Log::out() << "ship: " << ship << std::endl;
@@ -38,21 +33,11 @@ int main()
                 continue;
             }
 
-            const hlt::possibly<MoveNC> move = ship_routing.find_a_planet(map, ship, player_id);
+            const hlt::possibly<MoveNC> move = ship_routing.route_a_ship(ship);
             if (move.second)
             {
                 moves.push_back(MoveNC::toMove(move.first));
             }
-
-            // //ship has not been routed to a mine a planet
-            // //attack this planet (later find the nearest opponent planet)
-            // const hlt::possibly<hlt::Move> move = attack_something(map, planet, ship);
-            // if (move.second)
-            // {
-            //     hlt::Log::out() << "\tramming: " << planet.entity_id << std::endl;
-            //     moves.push_back(move.first);
-            //     break;
-            // }
         }
 
         if (!hlt::out::send_moves(moves))

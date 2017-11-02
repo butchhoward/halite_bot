@@ -43,7 +43,64 @@ namespace hlt {
         ;
         return out;
     }
+
+    std::ostream& operator<<(std::ostream& out, const Map& map) 
+    {        
+        out << "Map w: " << map.map_width << " h: " << map.map_height << std::endl;        
+        for ( const auto& ps : map.ships)
+        {
+            out << "\tPlayer " << ps.first << " ships: ";
+            for (const auto& s : ps.second)
+            {
+                out << s.entity_id << " ";
+            }
+            out << std::endl;
+        }
+            // std::unordered_map<PlayerId, entity_map<unsigned int>> ship_map;
+        out << "\tPlanets:" << std::endl;
+        for (const auto& p : map.planets)
+        {
+            out << "\t\t" << p << std::endl;
+        }
+            // entity_map<unsigned int> planet_map;
+        return out;
+    }
 }
+
+std::ostream& operator<<(std::ostream& out, const planet_info& p) 
+{
+    out << " Planet ID: " << p.planet_id << std::endl;
+    out << " Ships: "; 
+    for (const auto& s : p.ships )
+    {
+        out << s << " ";
+    }
+    out << std::endl;
+    out << " En Route: "; 
+    for (const auto& s : p.ships_en_route )
+    {
+        out << s << " ";
+    }
+    out << std::endl;
+
+    return out;
+}
+
+
+std::ostream& operator<<(std::ostream& out, const Routing& routing) 
+{
+    out << "--Routing--" << std::endl;
+    out << "Player ID: " << routing.player_id << std::endl;
+    out << routing.map << std::endl;
+    out << "Planet Info: " << std::endl;
+    for ( const auto& p : routing.planets)
+    {
+        out << "\tID : " << p.first << " INFO: " << (planet_info)p.second << std::endl;
+    }
+
+    return out;    
+}
+
 
 void log_all_planets(const std::vector<hlt::Planet>& planets)
 {

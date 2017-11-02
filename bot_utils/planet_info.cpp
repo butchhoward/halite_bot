@@ -13,18 +13,47 @@ planet_info::planet_info(const hlt::Planet &planet)
 void planet_info::add_planet(const hlt::Planet &planet)
 {
     planet_id = planet.entity_id;
-    for (const hlt::EntityId &ship : planet.docked_ships)
+    for (const hlt::EntityId &ship_id : planet.docked_ships)
     {
-        add_ship(ship);
+        ships.insert(ship_id);
+        ships_en_route.erase(ship_id);
     }
 }
 
-void planet_info::add_ship(const hlt::EntityId &ship)
+void planet_info::add_ship(const hlt::Ship &ship)
 {
-    ships.insert(ship);
+    ships.insert(ship.entity_id);
 }
 
-int planet_info::ship_count()
+void planet_info::add_ship_en_route(const hlt::Ship &ship)
 {
-    return ships.size();
+    ships_en_route.insert(ship.entity_id);
+}
+
+void planet_info::revoke_ship_en_route(const hlt::EntityId &ship_id)
+{
+    ships_en_route.erase(ship_id);
+}
+
+int planet_info::ship_count() const
+{
+    return ships.size() + ships_en_route.size();
+}
+
+int planet_info::en_route_count() const
+{
+    return ships_en_route.size();
+}
+
+bool planet_info::ship_en_route(const hlt::Ship& ship) const
+{
+    return ships_en_route.find(ship.entity_id) != ships_en_route.end();
+}
+
+std::unordered_set<hlt::EntityId> planet_info::all_ships() const
+{
+    std::unordered_set<hlt::EntityId> the_ships;
+    the_ships.insert(ships.begin(), ships.end());
+    the_ships.insert(ships_en_route.begin(), ships_en_route.end());
+    return the_ships;
 }

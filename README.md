@@ -9,7 +9,16 @@ Playing with halite
 
 I got a bot built, packaged, and sumbitted using the default C++ starter kit. There were a few things I had to modify to get it going. The intial starter kit appeared to be very Windows-y, Visual Studio 2017 focused. 
 
-The local-runner for halite is not well documented. I decided to settle on the convention that it will be one directory level up from the current folder.
+The local-runner for halite is not well documented. There seems to be plenty of help in the [Halite Forums](https://forums.halite.io). I decided to settle on the convention that it will be one directory level up from the current folder.
+
+# Lessons
+
+* You must send something to send_moves() every turn (or at least with in every 2-second period) even if it is an empty list of moves else the game will timeout.
+
+* Ship IDs are stable across turns. 
+
+* C++ 11 has lambdas.
+
 
 # Scripts
 
