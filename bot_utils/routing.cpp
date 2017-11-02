@@ -226,6 +226,8 @@ const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
     return move;
 }
 
+//TODO: Route to nearest planet first
+//TODO: If near planet that is not destinination, but which is dockable, then dock.
 
 hlt::possibly<MoveNC> Routing::continue_ships_previously_routed(const hlt::Ship& ship)
 {
