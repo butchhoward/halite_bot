@@ -230,7 +230,13 @@ const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
 hlt::possibly<MoveNC> Routing::continue_ships_previously_routed(const hlt::Ship& ship)
 {
     hlt::possibly<MoveNC> move(hlt::Move::noop(), false);
-    
+    if (ship.docking_status == hlt::ShipDockingStatus::Docked)
+    {
+        hlt::Log::out() << "ship already docked:" << ship.entity_id << std::endl;
+        move = std::make_pair(MoveNC(hlt::Move::noop()), true);
+        return move;
+    }   
+
     auto enroute = ship_en_route_to_any_planet(ship);
 
     if (enroute.second)
