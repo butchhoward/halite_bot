@@ -228,6 +228,7 @@ const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
 
 //TODO: Route to nearest planet first
 //TODO: If near planet that is not destinination, but which is dockable, then dock.
+//TODO: Go fast until close to a planet then go slower
 
 hlt::possibly<MoveNC> Routing::continue_ships_previously_routed(const hlt::Ship& ship)
 {
@@ -322,7 +323,7 @@ hlt::possibly<MoveNC> Routing::dock_at_planet(const hlt::Ship &ship, const hlt::
     else
     {
         hlt::Log::out() << "\t\tnavigate toward dock at planet: " << planet.entity_id << std::endl;
-        move = hlt::navigation::navigate_ship_to_dock(map, ship, planet, hlt::constants::MAX_SPEED / 2);
+        move = hlt::navigation::navigate_ship_to_dock(map, ship, planet, hlt::constants::MAX_SPEED);
     }
 
     return move;
