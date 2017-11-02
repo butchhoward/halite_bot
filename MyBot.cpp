@@ -15,10 +15,11 @@ int main()
     Routing ship_routing;
     ship_routing.set_player_id(player_id);
     ship_routing.set_map(metadata.initial_map);
+    unsigned int turn_count(0);
 
     for (;;)
     {
-        hlt::Log::log("--- NEW TURN ---");
+        hlt::Log::out() << "--- NEW TURN --- " << turn_count++ << std::endl;
         
         const hlt::Map map = hlt::in::get_map(metadata.map_width, metadata.map_height);
         
