@@ -80,9 +80,9 @@ void Routing::remove_destroyed_planets()
 {
 }
 
-planet_info Routing::add_planet(const hlt::Planet &planet)
+PlanetInfo Routing::add_planet(const hlt::Planet &planet)
 {
-    planet_info p;
+    PlanetInfo p;
     auto it = planets.find(planet.entity_id);
     if (it == planets.end())
     {
@@ -99,7 +99,7 @@ planet_info Routing::add_planet(const hlt::Planet &planet)
 
 void Routing::add_ship_to_planet(const hlt::Planet &planet, const hlt::Ship &ship)
 {
-    planet_info info;
+    PlanetInfo info;
     auto it = planets.find(planet.entity_id);
     if (it == planets.end())
     {
@@ -115,7 +115,7 @@ void Routing::add_ship_to_planet(const hlt::Planet &planet, const hlt::Ship &shi
 
 void Routing::remove_ship_from_planet(const hlt::EntityId &planet_id, const hlt::EntityId &ship_id)
 {
-    planet_info info;
+    PlanetInfo info;
     auto it = planets.find(planet_id);
     if (it != planets.end())
     {
@@ -130,7 +130,7 @@ int Routing::planet_ship_count(const hlt::Planet &planet)
     auto it = planets.find(planet.entity_id);
     if (it != planets.end())
     {
-        planet_info info = it->second;
+        PlanetInfo info = it->second;
         return info.en_route_count();
     }
 

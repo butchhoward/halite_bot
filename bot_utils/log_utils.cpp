@@ -67,7 +67,7 @@ namespace hlt {
     }
 }
 
-std::ostream& operator<<(std::ostream& out, const planet_info& p) 
+std::ostream& operator<<(std::ostream& out, const PlanetInfo& p) 
 {
     out << " Planet ID: " << p.planet_id << std::endl;
     out << " Ships: "; 
@@ -95,7 +95,7 @@ std::ostream& operator<<(std::ostream& out, const Routing& routing)
     out << "Planet Info: " << std::endl;
     for ( const auto& p : routing.planets)
     {
-        out << "\tID : " << p.first << " INFO: " << (planet_info)p.second << std::endl;
+        out << "\tID : " << p.first << " INFO: " << (PlanetInfo)p.second << std::endl;
     }
 
     return out;    

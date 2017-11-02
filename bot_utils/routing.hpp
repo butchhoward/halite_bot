@@ -16,7 +16,7 @@ class Routing
 public:
     Routing();
 
-    planet_info add_planet(const hlt::Planet &planet);
+    PlanetInfo add_planet(const hlt::Planet &planet);
     void add_ship_to_planet(const hlt::Planet& planet, const hlt::Ship& ship);
     int planet_ship_count(const hlt::Planet& planet);
     const hlt::possibly<MoveNC> route_a_ship(const hlt::Ship& ship);
@@ -39,7 +39,7 @@ private:
     
     hlt::EntityId player_id;
     hlt::Map map;
-    hlt::entity_map<planet_info> planets;
+    hlt::entity_map<PlanetInfo> planets;
 
     friend std::ostream& operator<<(std::ostream& out, const Routing& routing);
 };

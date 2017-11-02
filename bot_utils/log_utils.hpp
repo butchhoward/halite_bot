@@ -16,7 +16,7 @@ namespace hlt {
         
 }
 
-std::ostream& operator<<(std::ostream& out, const planet_info& p);
+std::ostream& operator<<(std::ostream& out, const PlanetInfo& p);
 std::ostream& operator<<(std::ostream& out, const Routing& routing);
 
 

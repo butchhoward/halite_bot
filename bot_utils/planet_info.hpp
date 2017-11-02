@@ -6,11 +6,11 @@
 
 #include <unordered_set>
 
-class planet_info 
+class PlanetInfo 
 {
 public:
-    planet_info();
-    planet_info(const hlt::Planet& planet);
+    PlanetInfo();
+    PlanetInfo(const hlt::Planet& planet);
 
     void add_planet(const hlt::Planet& planet);
     void add_ship(const hlt::Ship &ship);
@@ -26,6 +26,6 @@ private:
     std::unordered_set<hlt::EntityId> ships;
     std::unordered_set<hlt::EntityId> ships_en_route;
 
-    friend std::ostream& operator<<(std::ostream& out, const planet_info& p);
+    friend std::ostream& operator<<(std::ostream& out, const PlanetInfo& p);
     
 };
