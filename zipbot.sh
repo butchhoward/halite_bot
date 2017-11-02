@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 
-set -e
-rm halite_bot.zip
+rm halite_bot.zip &> /dev/null
 zip -r halite_bot.zip ./hlt MyBot.cpp
