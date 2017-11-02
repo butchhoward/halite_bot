@@ -29,7 +29,9 @@ namespace hlt {
 
         Log::open(std::to_string(player_id) + "_" + bot_name + ".log");
 
-        out::send_string(bot_name);
+        std::stringstream bot_name_with_decoration;
+        bot_name_with_decoration << bot_name << "_" << player_id;
+        out::send_string(bot_name_with_decoration.str());
 
         // halite sends full map as part of initialization, we can discard it since
         // we'll get it as first map update anyway, but if you want, you can parse
