@@ -18,6 +18,8 @@ int main()
 
     for (;;)
     {
+        hlt::Log::log("--- NEW TURN ---");
+        
         const hlt::Map map = hlt::in::get_map(metadata.map_width, metadata.map_height);
         
         ship_routing.set_map(map);

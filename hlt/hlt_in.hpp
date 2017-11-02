@@ -121,7 +121,6 @@ namespace hlt {
         }
 
         static const Map get_map(const int map_width, const int map_height) {
-            Log::log("--- NEW TURN ---");
             const std::string input = get_string();
             return parse_map(input, map_width, map_height);
         }
