@@ -32,6 +32,7 @@ private:
     void update_routes_from_turn_map();
     hlt::possibly<const hlt::EntityId> ship_en_route_to_any_planet(const hlt::Ship& ship) const;
     void remove_ship_from_planet(const hlt::EntityId &planet_id, const hlt::EntityId &ship_id);
+    hlt::possibly<MoveNC> continue_ships_previously_routed(const hlt::Ship& ship);    
     void add_current_planets();
     void remove_destroyed_ships();
     void remove_destroyed_planets();

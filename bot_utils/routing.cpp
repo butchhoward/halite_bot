@@ -153,20 +153,10 @@ const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
 {
     hlt::possibly<MoveNC> move(hlt::Move::noop(), false);
 
-    auto enroute = ship_en_route_to_any_planet(ship);
-    if (enroute.second)
+    move = continue_ships_previously_routed(ship);
+    if (move.second)
     {
-        hlt::Log::out() << "ship " << ship.entity_id << " already has route to planet " << enroute.first << std::endl;
-        const hlt::Planet &planet = map.get_planet(enroute.first);
-        if (!planet.owned || planet.owner_id == player_id)
-        {
-            move = dock_at_planet(ship, planet);
-            return move;
-        }
-        else
-        {
-            remove_ship_from_planet(planet.entity_id, ship.entity_id);
-        }
+        return move;
     }
 
     for (const hlt::Planet &planet : map.planets)
@@ -181,7 +171,7 @@ const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
 
         if (!planet.owned || planet.owner_id == player_id)
         {
-            hlt::Log::out() << "\tPossible planet: " << std::endl;
+            hlt::Log::out() << "\tPossible planet: " << planet.entity_id << " ships en route: " << planet_ship_count(planet) << std::endl;
 
             if (planet_ship_count(planet) == 0)
             {
@@ -212,6 +202,32 @@ const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
         move = attack_something(ship);
     }
 
+    return move;
+}
+
+
+hlt::possibly<MoveNC> Routing::continue_ships_previously_routed(const hlt::Ship& ship)
+{
+    hlt::possibly<MoveNC> move(hlt::Move::noop(), false);
+    
+    auto enroute = ship_en_route_to_any_planet(ship);
+
+    if (enroute.second)
+    {
+        hlt::Log::out() << "ship " << ship.entity_id << " already has route to planet " << enroute.first << std::endl;
+        const hlt::Planet &planet = map.get_planet(enroute.first);
+        if (!planet.owned || planet.owner_id == player_id)
+        {
+            move = dock_at_planet(ship, planet);
+        }
+        else
+        {
+            //other player got there first, let the routing below re-direct the ship
+            //bah: side affects
+            remove_ship_from_planet(planet.entity_id, ship.entity_id);
+        }
+    }
+    
     return move;
 }
 
