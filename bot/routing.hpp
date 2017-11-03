@@ -26,7 +26,7 @@ public:
     void set_player_id(const hlt::EntityId& the_player_id);
 
 private:
-    hlt::possibly<MoveNC> attack_planet(const hlt::Ship &ship, const hlt::Planet &planet);
+    hlt::possibly<MoveNC> attack_entity(const hlt::Ship &ship, const hlt::Entity &thing);
     hlt::possibly<MoveNC> attack_something(const hlt::Ship &ship);
     hlt::possibly<MoveNC> dock_at_planet(const hlt::Ship &ship, const hlt::Planet &planet);
     void update_routes_from_turn_map();

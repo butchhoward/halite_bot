@@ -34,6 +34,10 @@ int main()
             {
                 moves.push_back(MoveNC::toMove(move.first));
             }
+            else 
+            {
+                hlt::Log::out() << "Ship " << ship.entity_id << " not routed anywhere!!" << std::endl;
+            }
         }
 
         if (!hlt::out::send_moves(moves))

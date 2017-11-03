@@ -249,6 +249,11 @@ const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
         move = attack_something(ship);
     }
 
+    if (!move.second)
+    {
+        hlt::Log::out() << "Ship " << ship.entity_id << " has nowhere to go!!" << std::endl;
+    }
+
     return move;
 }
 
@@ -306,7 +311,7 @@ hlt::possibly<MoveNC> Routing::attack_something(const hlt::Ship &ship)
         if (planet.owned && planet.owner_id != player_id)
         {
             hlt::Log::out() << "\t\tattacking planet: " << planet.entity_id << std::endl;
-            move = attack_planet(ship, planet);
+            move = attack_entity(ship, planet);
             if (move.second)
             {
                 add_ship_to_planet(planet, ship);
@@ -315,15 +320,37 @@ hlt::possibly<MoveNC> Routing::attack_something(const hlt::Ship &ship)
         }
     }
 
+    if (!move.second)
+    {
+        for (const auto &shippy : map.ships)
+        {
+            if (shippy.first == player_id)
+            {
+                continue;
+            }
+            for (const auto& their_ship : shippy.second )
+            {
+                hlt::Log::out() << "\t\tattacking their_ship: " << their_ship.entity_id << std::endl;
+                move = attack_entity(ship, their_ship);
+                // if (move.second)
+                // {
+                //     add_ship_to_planet(planet, ship);
+                // }
+                break;
+            }
+        }
+            
+    }
+
     return move;
 }
 
-hlt::possibly<MoveNC> Routing::attack_planet(const hlt::Ship &ship, const hlt::Planet &planet)
+hlt::possibly<MoveNC> Routing::attack_entity(const hlt::Ship &ship, const hlt::Entity &thing)
 {
-    const int max_corrections = hlt::constants::MAX_NAVIGATION_CORRECTIONS / 4;
+    const int max_corrections = hlt::constants::MAX_NAVIGATION_CORRECTIONS;
     const bool avoid_obstacles = true;
     const double angular_step_rad = M_PI / 180.0;
-    const hlt::Location &target = ship.location.get_closest_point(planet.location, planet.radius / 2);
+    const hlt::Location &target = ship.location.get_closest_point(thing.location, thing.radius / 2);
 
     hlt::possibly<hlt::Move> move = hlt::navigation::navigate_ship_towards_target(
         map,
