@@ -170,6 +170,30 @@ hlt::possibly<const hlt::EntityId> Routing::ship_en_route_to_any_planet(const hl
     return std::make_pair(-1, false);
 }
 
+
+std::vector<hlt::Planet> sort_planets_by_distance(const hlt::Ship& ship, const std::vector<hlt::Planet>& planets)
+{
+    std::vector<hlt::Planet> planets_sorted;
+    for (const hlt::Planet &planet : planets)
+    {
+        double distance =  ship.location.get_distance_to(planet.location);
+        std::vector<hlt::Planet>::const_iterator it;
+        std::vector<hlt::Planet>::const_iterator pos = planets_sorted.end();
+        for (it=planets_sorted.begin(); it != planets_sorted.end(); ++it)
+        {
+            const hlt::Planet p = *it;
+            double pd =  ship.location.get_distance_to(p.location);
+            if (pd >= distance)
+            {
+                pos = it;
+                break;
+            }
+        }
+        planets_sorted.insert(pos, planet);
+    }
+    return planets_sorted;
+}
+
 const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
 {
     hlt::possibly<MoveNC> move(hlt::Move::noop(), false);
@@ -180,7 +204,9 @@ const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
         return move;
     }
 
-    for (const hlt::Planet &planet : map.planets)
+    std::vector<hlt::Planet> planets_by_distance = sort_planets_by_distance(ship, map.planets);
+
+    for (const hlt::Planet &planet : planets_by_distance)
     {
         hlt::Log::out() << "Checking Planet " << planet << std::endl;
 
