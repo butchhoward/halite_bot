@@ -69,7 +69,7 @@ namespace hlt {
 
 std::ostream& operator<<(std::ostream& out, const PlanetInfo& p) 
 {
-    out << " Planet ID: " << p.planet_id << std::endl;
+    out << " Planet ID: " << p.target_id << std::endl;
     out << " Ships: "; 
     for (const auto& s : p.ships )
     {
