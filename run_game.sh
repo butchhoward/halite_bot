@@ -38,3 +38,6 @@ echo "=====" >> t.out
 ../halite -d "288 192" "${BOT1}" "${BOT2}" "${BOT3}" "${BOT4}" | tee /dev/tty | grep -v '^Turn' >> t.out
 
 mv *.log ./Replays/
+
+echo "======Results======="
+grep 'rank #1' t.out | tee t_results.out
