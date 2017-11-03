@@ -1,8 +1,8 @@
 #pragma once
 
-#include "hlt/types.hpp"
-#include "hlt/planet.hpp"
-#include "hlt/ship.hpp"
+#include "../hlt/types.hpp"
+#include "../hlt/planet.hpp"
+#include "../hlt/ship.hpp"
 
 #include <unordered_set>
 

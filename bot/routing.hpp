@@ -3,10 +3,10 @@
 #include "movenc.hpp"
 #include "planet_info.hpp"
 
-#include "hlt/map.hpp"
-#include "hlt/types.hpp"
-#include "hlt/ship.hpp"
-#include "hlt/planet.hpp"
+#include "../hlt/map.hpp"
+#include "../hlt/types.hpp"
+#include "../hlt/ship.hpp"
+#include "../hlt/planet.hpp"
 
 #include <unordered_set>
 

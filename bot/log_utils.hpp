@@ -1,7 +1,7 @@
 #pragma once
 
-#include "hlt/navigation.hpp"
-#include "hlt/log.hpp"
+#include "../hlt/navigation.hpp"
+#include "../hlt/log.hpp"
 
 
 #include "planet_info.hpp"

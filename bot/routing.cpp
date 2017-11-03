@@ -1,7 +1,7 @@
 #include "routing.hpp"
 
-#include "hlt/navigation.hpp"
-#include "hlt/log.hpp"
+#include "../hlt/navigation.hpp"
+#include "../hlt/log.hpp"
 
 #include "bot_utils.hpp"
 #include "log_utils.hpp"

@@ -5,6 +5,7 @@ Makefile
 
 *.log
 MyBot
+MyBot_*
 replay*.hlt
 *.zip
 t.out
