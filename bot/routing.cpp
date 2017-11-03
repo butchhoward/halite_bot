@@ -40,9 +40,9 @@ void Routing::clear()
 
 void Routing::update_routes_from_turn_map()
 {
+    remove_destroyed_planets();
     remove_destroyed_ships();
     remove_docked_ships();
-    remove_destroyed_planets();
     add_current_planets();
 }
 
@@ -54,6 +54,32 @@ void Routing::add_current_planets()
         {
             add_planet(p);
         }
+    }
+}
+
+void Routing::remove_destroyed_planets()
+{
+    std::unordered_set<hlt::EntityId> planets_to_remove;
+    for (const auto& pi : planets)
+    {
+        planets_to_remove.insert(pi.first);
+    }
+
+    for (const auto& pi : planets)
+    {
+        for (const auto& p : map.planets)
+        {
+            if (pi.first == p.entity_id)
+            {
+                planets_to_remove.erase(pi.first);
+                break;
+            }
+        }
+    }
+
+    for (const auto& pid : planets_to_remove)
+    {
+        planets.erase(pid);
     }
 }
 
@@ -95,10 +121,6 @@ void Routing::remove_docked_ships()
             }
         }
     }
-}
-
-void Routing::remove_destroyed_planets()
-{
 }
 
 PlanetInfo Routing::add_planet(const hlt::Planet &planet)
