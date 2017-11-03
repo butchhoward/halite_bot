@@ -4,7 +4,7 @@ ROOT=$(git rev-parse --show-toplevel)
 pushd ${ROOT} &>/dev/null
 
 rm bot.zip &> /dev/null
-zip -r bot.zip ./hlt ./bot MyBot.cpp
+zip -rq bot.zip ./hlt ./bot MyBot.cpp
 ERR=$?
 
 popd
