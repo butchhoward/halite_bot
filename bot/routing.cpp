@@ -279,9 +279,9 @@ const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
     return move;
 }
 
-//TODO: Route to nearest planet first
 //TODO: If near planet that is not destinination, but which is dockable, then dock.
-//TODO: Go fast until close to a planet then go slower
+//TODO: Fly in flights for coordinated attacks
+//TODO: Fly in circles (for fun and also to go around a planet as an attack/defense)
 
 hlt::possibly<MoveNC> Routing::continue_ships_previously_routed(const hlt::Ship& ship)
 {
