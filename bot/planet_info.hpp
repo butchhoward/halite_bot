@@ -13,16 +13,13 @@ public:
     
     void add_target(const hlt::EntityId& targetid);
     void add_ship(const hlt::Ship &ship);
-    void add_ship_en_route(const hlt::Ship &ship);
     void revoke_ship_en_route(const hlt::EntityId &ship_id);
     int ship_count() const;
-    int en_route_count() const;
     bool ship_en_route(const hlt::Ship& ship) const;
     std::unordered_set<hlt::EntityId> all_ships() const;
 
 protected:
     hlt::EntityId target_id;
-    std::unordered_set<hlt::EntityId> ships;
     std::unordered_set<hlt::EntityId> ships_en_route;
 
     friend std::ostream& operator<<(std::ostream& out, const TargetInfo& p);

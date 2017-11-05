@@ -152,7 +152,7 @@ void Routing::add_ship_to_planet(const hlt::Planet &planet, const hlt::Ship &shi
     {
         info = it->second;
     }
-    info.add_ship_en_route(ship);
+    info.add_ship(ship);
     planets[planet.entity_id] = info;
 }
 
@@ -174,7 +174,7 @@ int Routing::planet_ship_count(const hlt::Planet &planet)
     if (it != planets.end())
     {
         PlanetInfo info = it->second;
-        return info.en_route_count();
+        return info.ship_count();
     }
 
     return 0;

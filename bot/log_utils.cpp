@@ -71,18 +71,11 @@ std::ostream& operator<<(std::ostream& out, const PlanetInfo& p)
 {
     out << " Planet ID: " << p.target_id << std::endl;
     out << " Ships: "; 
-    for (const auto& s : p.ships )
-    {
-        out << s << " ";
-    }
-    out << std::endl;
-    out << " En Route: "; 
     for (const auto& s : p.ships_en_route )
     {
         out << s << " ";
     }
     out << std::endl;
-
     return out;
 }
 
