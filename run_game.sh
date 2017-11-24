@@ -4,11 +4,12 @@ set -e
 ROOT="$(git rev-parse --show-toplevel)/bots"
 
 #TODO: get 4 most recent bots as defaults
+DEFAULT_BOT="MyBot_1.0.10"
 
-BOT1="${ROOT}/${1:-MyBot_1.0.3}"
-BOT2="${ROOT}/${2:-MyBot_1.0.3}"
-BOT3="${ROOT}/${3:-MyBot_1.0.3}"
-BOT4="${ROOT}/${4:-MyBot_1.0.3}"
+BOT1="${ROOT}/${1:-${DEFAULT_BOT}}"
+BOT2="${ROOT}/${2:-${DEFAULT_BOT}}"
+BOT3="${ROOT}/${3:-${DEFAULT_BOT}}"
+BOT4="${ROOT}/${4:-${DEFAULT_BOT}}"
 
 echo "=====" > t.out
 ../halite -d "240 160" "${BOT1}" "${BOT2}" | tee /dev/tty | grep -v '^Turn' >> t.out
