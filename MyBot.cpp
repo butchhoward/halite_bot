@@ -29,7 +29,7 @@ int main()
         {
             hlt::Log::out() << "ship: " << ship << std::endl;
 
-            const hlt::possibly<MoveNC> move = ship_routing.route_a_ship(ship);
+            const MOVE_MAYBE move = ship_routing.route_a_ship(ship);
             if (move.second)
             {
                 moves.push_back(MoveNC::toMove(move.first));

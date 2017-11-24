@@ -180,7 +180,7 @@ int Routing::planet_ship_count(const hlt::Planet &planet)
     return 0;
 }
 
-hlt::possibly<const hlt::EntityId> Routing::ship_en_route_to_any_planet(const hlt::Ship &ship) const
+PLANET_MAYBE Routing::ship_en_route_to_any_planet(const hlt::Ship &ship) const
 {
     for (const auto &p : planets)
     {
@@ -216,9 +216,9 @@ std::vector<hlt::Planet> sort_planets_by_distance(const hlt::Ship& ship, const s
     return planets_sorted;
 }
 
-const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
+const MOVE_MAYBE Routing::route_a_ship(const hlt::Ship &ship)
 {
-    hlt::possibly<MoveNC> move(hlt::Move::noop(), false);
+    MOVE_MAYBE move(hlt::Move::noop(), false);
 
     move = continue_ships_previously_routed(ship);
     if (move.second)
@@ -283,9 +283,9 @@ const hlt::possibly<MoveNC> Routing::route_a_ship(const hlt::Ship &ship)
 //TODO: Fly in flights for coordinated attacks
 //TODO: Fly in circles (for fun and also to go around a planet as an attack/defense)
 
-hlt::possibly<MoveNC> Routing::continue_ships_previously_routed(const hlt::Ship& ship)
+MOVE_MAYBE Routing::continue_ships_previously_routed(const hlt::Ship& ship)
 {
-    hlt::possibly<MoveNC> move(hlt::Move::noop(), false);
+    MOVE_MAYBE move(hlt::Move::noop(), false);
     if (ship.docking_status == hlt::ShipDockingStatus::Docked)
     {
         hlt::Log::out() << "ship already docked:" << ship.entity_id << std::endl;
@@ -320,61 +320,84 @@ hlt::possibly<MoveNC> Routing::continue_ships_previously_routed(const hlt::Ship&
     return move;
 }
 
-hlt::possibly<MoveNC> Routing::attack_something(const hlt::Ship &ship)
+MOVE_MAYBE Routing::attack_something(const hlt::Ship &ship)
 {
     hlt::Log::out() << "---attack something with : " << ship.entity_id << std::endl;
 
-    hlt::possibly<MoveNC> move(hlt::Move::noop(), false);
+    std::pair<hlt::EntityId, MOVE_MAYBE> move(-1, MOVE_MAYBE(hlt::Move::noop(), false));
+
+    move = attack_some_ship(ship);
+    if (!move.second.second)
+    {
+        return move.second;
+    }
+
+    move = attack_some_planet(ship);
+    if (move.second.second)
+    {
+        add_ship_to_planet(map.get_planet(move.first), ship);
+    }
+
+    return move.second;
+}
+
+std::pair<hlt::EntityId, MOVE_MAYBE> Routing::attack_some_ship(const hlt::Ship &ship)
+{
+    hlt::EntityId ship_attacked = -1;
+    MOVE_MAYBE move(hlt::Move::noop(), false);
+
+    for (const auto &shippy : map.ships)
+    {
+        if (shippy.first == player_id)
+        {
+            continue;
+        }
+        for (const auto& their_ship : shippy.second )
+        {
+            hlt::Log::out() << "\t\tattacking their_ship: " << their_ship.entity_id << std::endl;
+            move = attack_entity(ship, their_ship);
+            if (move.second)
+            {
+                ship_attacked = their_ship.entity_id;
+            }
+            break;
+        }
+    }
+    
+    return std::make_pair(ship_attacked, move);
+
+}
+
+std::pair<hlt::EntityId, MOVE_MAYBE> Routing::attack_some_planet(const hlt::Ship &ship)
+{
+    hlt::EntityId planet_attacked = -1;
+    MOVE_MAYBE move(hlt::Move::noop(), false);
 
     for (const auto &planet : map.planets)
     {
-        hlt::Log::out() << "\tmaybe attack planet: " << planet.entity_id << std::endl;
-
         if (planet.owned && planet.owner_id != player_id)
         {
             hlt::Log::out() << "\t\tattacking planet: " << planet.entity_id << std::endl;
             move = attack_entity(ship, planet);
             if (move.second)
             {
-                add_ship_to_planet(planet, ship);
+                planet_attacked = planet.entity_id;
             }
             break;
         }
-    }
+    }    
 
-    if (!move.second)
-    {
-        for (const auto &shippy : map.ships)
-        {
-            if (shippy.first == player_id)
-            {
-                continue;
-            }
-            for (const auto& their_ship : shippy.second )
-            {
-                hlt::Log::out() << "\t\tattacking their_ship: " << their_ship.entity_id << std::endl;
-                move = attack_entity(ship, their_ship);
-                // if (move.second)
-                // {
-                //     add_ship_to_planet(planet, ship);
-                // }
-                break;
-            }
-        }
-            
-    }
-
-    return move;
+    return std::make_pair(planet_attacked, move);
 }
 
-hlt::possibly<MoveNC> Routing::attack_entity(const hlt::Ship &ship, const hlt::Entity &thing)
+MOVE_MAYBE Routing::attack_entity(const hlt::Ship &ship, const hlt::Entity &thing)
 {
     const int max_corrections = hlt::constants::MAX_NAVIGATION_CORRECTIONS;
     const bool avoid_obstacles = true;
     const double angular_step_rad = M_PI / 180.0;
     const hlt::Location &target = ship.location.get_closest_point(thing.location, thing.radius / 2);
 
-    hlt::possibly<hlt::Move> move = hlt::navigation::navigate_ship_towards_target(
+    MOVE_MAYBE move = hlt::navigation::navigate_ship_towards_target(
         map,
         ship,
         target,
@@ -386,9 +409,9 @@ hlt::possibly<MoveNC> Routing::attack_entity(const hlt::Ship &ship, const hlt::E
     return std::make_pair(MoveNC(move.first), move.second);
 }
 
-hlt::possibly<MoveNC> Routing::dock_at_planet(const hlt::Ship &ship, const hlt::Planet &planet)
+MOVE_MAYBE Routing::dock_at_planet(const hlt::Ship &ship, const hlt::Planet &planet)
 {
-    hlt::possibly<MoveNC> move(hlt::Move::noop(), false);
+    MOVE_MAYBE move(hlt::Move::noop(), false);
 
     if (ship.can_dock(planet))
     {

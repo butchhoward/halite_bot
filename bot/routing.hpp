@@ -10,6 +10,8 @@
 
 #include <unordered_set>
 
+typedef hlt::possibly<const hlt::EntityId> PLANET_MAYBE;
+typedef hlt::possibly<MoveNC> MOVE_MAYBE;
 
 class Routing
 {
@@ -19,20 +21,22 @@ public:
     PlanetInfo add_planet(const hlt::Planet &planet);
     void add_ship_to_planet(const hlt::Planet& planet, const hlt::Ship& ship);
     int planet_ship_count(const hlt::Planet& planet);
-    const hlt::possibly<MoveNC> route_a_ship(const hlt::Ship& ship);
+    const MOVE_MAYBE route_a_ship(const hlt::Ship& ship);
     void clear();    
 
     void set_map(const hlt::Map& the_map);
     void set_player_id(const hlt::EntityId& the_player_id);
 
 private:
-    hlt::possibly<MoveNC> attack_entity(const hlt::Ship &ship, const hlt::Entity &thing);
-    hlt::possibly<MoveNC> attack_something(const hlt::Ship &ship);
-    hlt::possibly<MoveNC> dock_at_planet(const hlt::Ship &ship, const hlt::Planet &planet);
+    MOVE_MAYBE attack_entity(const hlt::Ship &ship, const hlt::Entity &thing);
+    MOVE_MAYBE attack_something(const hlt::Ship &ship);
+    std::pair<hlt::EntityId, MOVE_MAYBE> attack_some_planet(const hlt::Ship &ship);
+    std::pair<hlt::EntityId, MOVE_MAYBE> attack_some_ship(const hlt::Ship &ship);
+    MOVE_MAYBE dock_at_planet(const hlt::Ship &ship, const hlt::Planet &planet);
     void update_routes_from_turn_map();
-    hlt::possibly<const hlt::EntityId> ship_en_route_to_any_planet(const hlt::Ship& ship) const;
+    PLANET_MAYBE ship_en_route_to_any_planet(const hlt::Ship& ship) const;
     void remove_ship_from_planet(const hlt::EntityId &planet_id, const hlt::EntityId &ship_id);
-    hlt::possibly<MoveNC> continue_ships_previously_routed(const hlt::Ship& ship);    
+    MOVE_MAYBE continue_ships_previously_routed(const hlt::Ship& ship);    
     void add_current_planets();
     void remove_destroyed_ships();
     void remove_destroyed_planets();
