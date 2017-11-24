@@ -3,8 +3,24 @@ set -e
 
 ROOT="$(git rev-parse --show-toplevel)/bots"
 
+function get_default_bot()
+{
+    #get highest tag number
+    local VERSION=`git describe --abbrev=0 --tags 2>/dev/null`
+    local VERSION_BITS=(${VERSION//./ })
+    local VNUM1=${VERSION_BITS[0]}
+    local VNUM2=${VERSION_BITS[1]}
+    local VNUM3=${VERSION_BITS[2]}
+
+    #use the previous as the default
+    local VNUM3=$((VNUM3-1))
+
+    echo "$VNUM1.$VNUM2.$VNUM3"
+}
+
 #TODO: get 4 most recent bots as defaults
-DEFAULT_BOT="MyBot_1.0.10"
+# DEFAULT_BOT="MyBot_1.0.10"
+DEFAULT_BOT=$(get_default_bot)
 
 BOT1="${ROOT}/${1:-${DEFAULT_BOT}}"
 BOT2="${ROOT}/${2:-${DEFAULT_BOT}}"
