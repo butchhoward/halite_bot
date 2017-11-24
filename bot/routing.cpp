@@ -282,6 +282,8 @@ const MOVE_MAYBE Routing::route_a_ship(const hlt::Ship &ship)
 //TODO: If near planet that is not destinination, but which is dockable, then dock.
 //TODO: Fly in flights for coordinated attacks
 //TODO: Fly in circles (for fun and also to go around a planet as an attack/defense)
+//TODO: Track ships-as-targets in the same way planets-as-targets are tracked
+//TODO: Prioritize planets with fewer than 3 ships docked when searching for planets-to-dock on
 
 MOVE_MAYBE Routing::continue_ships_previously_routed(const hlt::Ship& ship)
 {
@@ -341,7 +343,7 @@ MOVE_MAYBE Routing::attack_something(const hlt::Ship &ship)
     return move.second;
 }
 
-std::pair<hlt::EntityId, MOVE_MAYBE> Routing::attack_some_ship(const hlt::Ship &ship)
+SHIP_MOVE_MAYBE Routing::attack_some_ship(const hlt::Ship &ship)
 {
     hlt::EntityId ship_attacked = -1;
     MOVE_MAYBE move(hlt::Move::noop(), false);
@@ -368,7 +370,7 @@ std::pair<hlt::EntityId, MOVE_MAYBE> Routing::attack_some_ship(const hlt::Ship &
 
 }
 
-std::pair<hlt::EntityId, MOVE_MAYBE> Routing::attack_some_planet(const hlt::Ship &ship)
+PLANET_MOVE_MAYBE Routing::attack_some_planet(const hlt::Ship &ship)
 {
     hlt::EntityId planet_attacked = -1;
     MOVE_MAYBE move(hlt::Move::noop(), false);

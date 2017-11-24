@@ -10,8 +10,12 @@
 
 #include <unordered_set>
 
-typedef hlt::possibly<const hlt::EntityId> PLANET_MAYBE;
-typedef hlt::possibly<MoveNC> MOVE_MAYBE;
+using PlanetId = hlt::EntityId;
+using ShipId = hlt::EntityId;
+using PLANET_MAYBE = hlt::possibly<const hlt::EntityId>;
+using MOVE_MAYBE = hlt::possibly<MoveNC>;
+using PLANET_MOVE_MAYBE = std::pair<PlanetId, MOVE_MAYBE>;
+using SHIP_MOVE_MAYBE = std::pair<ShipId, MOVE_MAYBE>;
 
 class Routing
 {
@@ -30,8 +34,8 @@ public:
 private:
     MOVE_MAYBE attack_entity(const hlt::Ship &ship, const hlt::Entity &thing);
     MOVE_MAYBE attack_something(const hlt::Ship &ship);
-    std::pair<hlt::EntityId, MOVE_MAYBE> attack_some_planet(const hlt::Ship &ship);
-    std::pair<hlt::EntityId, MOVE_MAYBE> attack_some_ship(const hlt::Ship &ship);
+    PLANET_MOVE_MAYBE attack_some_planet(const hlt::Ship &ship);
+    SHIP_MOVE_MAYBE attack_some_ship(const hlt::Ship &ship);
     MOVE_MAYBE dock_at_planet(const hlt::Ship &ship, const hlt::Planet &planet);
     void update_routes_from_turn_map();
     PLANET_MAYBE ship_en_route_to_any_planet(const hlt::Ship& ship) const;
